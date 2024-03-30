@@ -31,6 +31,12 @@ public class Account implements CommonEntity<Long> {
     @NonNull
     private Client client_id;
 
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "office_id")
+    @ToString.Exclude
+    @NonNull
+    private Office office_id;
+
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "bankacctype_id")
@@ -39,8 +45,14 @@ public class Account implements CommonEntity<Long> {
     private BankAccType bankacctype_id;
 
 
+    @Column(nullable = false, name="curperiod")
+    private  Long curperiod;
+
+    @Column(nullable = false, name="curaccum")
+    private  Long curaccum;
+
+
     @Column(nullable = false, name="curbalance")
-    @NonNull
     private  Long curbalance;
 
 

@@ -5,12 +5,14 @@ import com.example.javaprac.models.CommonEntity;
 import jakarta.persistence.criteria.CriteriaQuery;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.stereotype.Repository;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.List;
 
 @Repository
 public abstract class CommonDAOImpl<T extends CommonEntity<ID>, ID extends Serializable> implements CommonDAO<T, ID> {
@@ -35,12 +37,14 @@ public abstract class CommonDAOImpl<T extends CommonEntity<ID>, ID extends Seria
         }
     }
 
+
     @Override
     public Collection<T> getAll() {
         try (Session session = sessionFactory.openSession()) {
-            CriteriaQuery<T> criteriaQuery = session.getCriteriaBuilder().createQuery(persistentClass);
-            criteriaQuery.from(persistentClass);
-            return session.createQuery(criteriaQuery).getResultList();
+            Transaction t = session.beginTransaction();
+            Collection <T> b = session.createQuery("from " + persistentClass.getSimpleName(), persistentClass).getResultList();
+            t.commit();
+            return b;
         }
     }
 

@@ -16,7 +16,6 @@ import org.hibernate.type.SqlTypes;
 @Setter
 @ToString
 @NoArgsConstructor
-@RequiredArgsConstructor
 @AllArgsConstructor
 public class Office implements CommonEntity<Long> {
 
@@ -28,11 +27,17 @@ public class Office implements CommonEntity<Long> {
     @Column(nullable = false, name="name" )
     private String name;
 
+    @Column(nullable = false, name="telnumber1" )
+    private String telnumber1;
+
+    @Column(nullable = false, name="telnumber2" )
+    private String telnumber2;
+
+    @Column(nullable = false, name="email" )
+    private String email;
+
     @Column(nullable = false, name="address" )
     private String address;
-
-    @Column(nullable = false, name="contacts" )
-    private JsonAlias contacts;
 
 
 }

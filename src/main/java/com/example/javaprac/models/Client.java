@@ -15,7 +15,6 @@ import java.util.Dictionary;
 @Setter
 @ToString
 @NoArgsConstructor
-@RequiredArgsConstructor
 @AllArgsConstructor
 public class Client implements CommonEntity<Long> {
 
@@ -25,18 +24,20 @@ public class Client implements CommonEntity<Long> {
     private Long id;
 
     @Column(nullable = false, name="name" )
-    @NonNull
     private String name;
 
+    @Column(nullable = false, name="telnumber1" )
+    private String telnumber1;
 
-    @Column(nullable = false, name="contacts" )
-    @NonNull
-    private JsonAlias contacts;
+    @Column(name="telnumber2" )
+    private String telnumber2;
 
-    @Column(nullable = false, name="accounts" )
-    private Long[] accounts;
+    @Column(name="email" )
+    private String email;
 
-    @Column(nullable = false, name="offices" )
-    private Long[] clients;
+    @Column(name="address" )
+    private String address;
+
+
 
 }

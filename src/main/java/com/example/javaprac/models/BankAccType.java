@@ -13,7 +13,6 @@ import java.sql.Timestamp;
 @Setter
 @ToString
 @NoArgsConstructor
-@RequiredArgsConstructor
 @AllArgsConstructor
 public class BankAccType implements CommonEntity<Long> {
 
@@ -23,30 +22,23 @@ public class BankAccType implements CommonEntity<Long> {
     private Long id;
 
     @Column(nullable = false, name="name" )
-    @NonNull
     private String name;
 
     @Column(nullable = false, name="profit" )
-    @NonNull
-    private Long profit;
+    private Double profit;
 
     @Column(nullable = false, name="dayperiod" )
-    @NonNull
-    private Timestamp dayperiod;
+    private Long dayperiod;
 
     @Column(nullable = false, name="maxdebit" )
-    @NonNull
     private Long maxdebit;
 
     @Column(nullable = false, name="mindebit" )
-    @NonNull
     private Long mindebit;
 
     @Column(nullable = false, name="maxdaccrual" )
-    @NonNull
     private Long maxaccruel;
 
     @Column(nullable = false, name="minaccrual" )
-    @NonNull
     private Long minaccrual;
 }

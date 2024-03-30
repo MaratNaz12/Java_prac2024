@@ -4,10 +4,13 @@ import com.example.javaprac.DAO.AccountDAO;
 import com.example.javaprac.models.Account;
 import com.example.javaprac.models.BankAccType;
 import com.example.javaprac.models.Client;
+import com.example.javaprac.models.Operation;
 import org.hibernate.Session;
+import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.Collection;
 import java.util.List;
 
 @Repository
@@ -16,47 +19,49 @@ public class AccountDAOImpl extends CommonDAOImpl<Account, Long> implements Acco
     public AccountDAOImpl(){
         super(Account.class);
     }
-    @Override
-    public List<Account> FilterBalance(BalanceFilterEnum sign, Long balance) {
-        try (Session session = sessionFactory.openSession()) {
-            if (sign == BalanceFilterEnum.Greater) {
-                Query<Account> query = session.createQuery("FROM Account WHERE curbalance >= :balance", Account.class)
-                        .setParameter("balance", balance);
-                List<Account> resultList = query.getResultList();
-                return resultList.isEmpty() ? null : resultList;
-            } else {
-                Query<Account> query = session.createQuery("FROM Account WHERE curbalance <= :balance", Account.class)
-                        .setParameter("balance", balance);
-                List<Account> resultList = query.getResultList();
-                return resultList.isEmpty() ? null : resultList;
-            }
-        }
-    }
-
 
     @Override
-    public List<Account> FilterType(BankAccType acctype) {
+    public List <Account> GetWithFilter(String fieldName, int value_){
+
         try (Session session = sessionFactory.openSession()) {
-            Query<Account> query = session.createQuery("FROM Account WHERE bankacctype_id = :acctype", Account.class)
-                    .setParameter("acctype", acctype);
-            List<Account> resultList = query.getResultList();
-            return resultList.isEmpty() ? null : resultList;
+            String query = "from Account  where " + fieldName + "= :value_";
+            Transaction t = session.beginTransaction();
+            List<Account> listOperations = session
+                    .createQuery(query, Account.class)
+                    .setParameter("value_", value_)
+                    .getResultList();
+            t.commit();
+            return listOperations;
         }
     }
 
     @Override
-    public List<Account> FilterByClient(Client client_id){
+    public List<Account> GetWithFilterBalanceRange(int lo, int hi) {
         try (Session session = sessionFactory.openSession()) {
-            Query<Account> query = session.createQuery("FROM Account WHERE client_id = :client_id", Account.class)
-                    .setParameter("client_id", client_id);
-            List<Account> resultList = query.getResultList();
-            return resultList.isEmpty() ? null : resultList;
+            String query = "from Account  where curbalance" + " between :lo and :hi";
+            Transaction t = session.beginTransaction();
+            List<Account> listOperations = session
+                    .createQuery(query, Account.class)
+                    .setParameter("lo", lo)
+                    .setParameter("hi", hi)
+                    .getResultList();
+            t.commit();
+            return listOperations;
         }
-
     }
 
-
-    private String likeExpr(String param) {
-        return "%" + param + "%";
+    @Override
+    public List<Account> GetWithFilterBalanceFree(String sign_, int value_) {
+        try (Session session = sessionFactory.openSession()) {
+            String query = "from Account  where curbalance" + sign_ + " :value_";
+            Transaction t = session.beginTransaction();
+            List<Account> listOperations = session
+                    .createQuery(query, Account.class)
+                    .setParameter("value_", value_)
+                    .getResultList();
+            t.commit();
+            return listOperations;
+        }
     }
 }
+
